@@ -19,9 +19,9 @@ class UserController extends Controller
         if(auth()->attempt(['username'=>$incomingFields['loginusername'],'password'=>$incomingFields['loginpassword']]))
                 {
                     $request->session()->regenerate();
-                    return 'AUTHENTICATED';
+                    return view('homepage-feed');
                 } else {
-                    return 'NON AUTHENTICATED';
+                    return view('homepage');
                 };
 
            
@@ -48,5 +48,10 @@ class UserController extends Controller
         } else {
             return view('homepage');
         }
+    }
+
+    public function logout(){
+        auth()->logout();
+        return view('homepage');
     }
 }
