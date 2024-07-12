@@ -9,7 +9,22 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function login(){
+    public function login(Request $request){
+        $incomingFields = $request->validate([
+            'loginusername'=> 'required',
+            'loginpassword'=> 'required'
+        ]);
+       
+
+        if(auth()->attempt(['username'=>$incomingFields['loginusername'],'password'=>$incomingFields['loginpassword']]))
+                {
+                    $request->session()->regenerate();
+                    return 'AUTHENTICATED';
+                } else {
+                    return 'NON AUTHENTICATED';
+                };
+
+           
 
     }
 
@@ -25,5 +40,13 @@ class UserController extends Controller
         User::create($incomingFields);
         
         return "Welcome";
+    }
+
+    public function showCorrectHomepage(){
+        if(auth()->check()){
+            return view('homepage-feed');
+        } else {
+            return view('homepage');
+        }
     }
 }
