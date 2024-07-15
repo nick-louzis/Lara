@@ -24,10 +24,13 @@ class PostController extends Controller
 
         //create the field in the array and the user id with help of global auth().
         $incomingFields['user_id'] = auth()->id();
+        $post = Post::create($incomingFields);
+        return redirect("/post/{$post->id}")->with('success', 'New post created successfully');
 
-        Post::create($incomingFields);
+    }
 
-        return $incomingFields['body'];
-
+    public function showSinglePost(Post $postId){
+       
+        return view('single-post', ['post'=> $postId]);
     }
 }
