@@ -14,14 +14,31 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/admin', function(){
+    if(Gate::allows('visitAdminPanel')){
+        return "Welcome Admin";
+    }
+    return 'Only for admin';
+});
+
+
 //User related routes
-Route::get('/', [UserController::class, "showCorrectHomepage"]);
-Route::post('/register', [UserController::class, "register"] );
-Route::post('/login', [UserController::class, "login"] );
-Route::post('/logout', [UserController::class, "logout"] );
+Route::get('/', [UserController::class, "showCorrectHomepage"])->name('login');
+Route::post('/register', [UserController::class, "register"])->middleware('guest');
+Route::post('/login', [UserController::class, "login"])->middleware('guest');
+Route::post('/logout', [UserController::class, "logout"])->middleware('mustBeLoggenIn');
 
 //Post related routes
-Route::get('/create-post', [PostController::class, "showCreatePost"]);
-Route::post('/create-post', [PostController::class, "createPost"]);
+Route::get('/create-post', [PostController::class, "showCreatePost"])->middleware('mustBeLoggenIn');
+Route::post('/create-post', [PostController::class, "createPost"])->middleware('mustBeLoggenIn');
+Route::get('/post/{post}', [PostController::class, "showSinglePost"]);
+//way to use policy authorization with midleware
+Route::delete('/post/{post}', [PostController::class, "delete"])->middleware('can:delete,post');
 
-Route::get('/post/{postId}', [PostController::class, "showSinglePost"]);
+Route::get('/post/{post}/edit', [PostController::class, "showEditForm"])->middleware('can:update,post');
+Route::put('/post/{post}', [PostController::class, "updatePost"])->middleware('can:update,post');
+//profile routes
+
+//search based on username
+Route::get('/profile/{user:username}', [UserController::class, "showProfile"]);
