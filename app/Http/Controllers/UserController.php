@@ -19,12 +19,10 @@ class UserController extends Controller
         if(auth()->attempt(['username'=>$incomingFields['loginusername'],'password'=>$incomingFields['loginpassword']]))
                 {
                     $request->session()->regenerate();
-                    return view('homepage-feed');
+                    return redirect('/')->with('success', 'You have logged in successfully.');
                 } else {
-                    return view('homepage');
+                    return redirect('/')->with('failure', 'Invalid Credentials.');
                 };
-
-           
 
     }
 
@@ -37,9 +35,9 @@ class UserController extends Controller
         ]);
 
         $incomingFields['password'] = bcrypt($incomingFields['password']);
-        User::create($incomingFields);
-        
-        return "Welcome";
+        $newUser =  User::create($incomingFields);
+        auth()->login($newUser);
+        return redirect('/')->with('register', 'Thank you for creating an account.'); 
     }
 
     public function showCorrectHomepage(){
@@ -52,6 +50,6 @@ class UserController extends Controller
 
     public function logout(){
         auth()->logout();
-        return view('homepage');
+        return redirect('/')->with('logout','You have logged out successfully.');
     }
 }
