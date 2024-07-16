@@ -16,12 +16,12 @@
         </div>
   
         <p class="text-muted small mb-4">
-          <a href="#"><img class="avatar-tiny" src="https://gravatar.com/avatar/f64fc44c03a8a7eb1d52502950879659?s=128" /></a>
+          <a href="#"><img class="avatar-tiny" src="{{$post->matchPostToUser->avatar}}" /></a>
           Posted by <a href="#">{{$post->matchPostToUser->username}}</a> on {{$post->created_at}}
         </p>
   
         <div class="body-content">
-          {{-- {!! $post->body !!} in this way we output Html --}}
+          {{-- in this way we output Html --}}
           {!! $post->body !!} 
         </div>
       </div>

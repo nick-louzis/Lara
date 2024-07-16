@@ -42,3 +42,5 @@ Route::put('/post/{post}', [PostController::class, "updatePost"])->middleware('c
 
 //search based on username
 Route::get('/profile/{user:username}', [UserController::class, "showProfile"]);
+Route::get('/manage-avatar', [UserController::class, "showAvatarForm"])->middleware('mustBeLoggenIn');
+Route::post('/manage-avatar', [UserController::class, "saveAvatar"])->middleware('mustBeLoggenIn');;
