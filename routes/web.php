@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FollowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,8 @@ Route::put('/post/{post}', [PostController::class, "updatePost"])->middleware('c
 //search based on username
 Route::get('/profile/{user:username}', [UserController::class, "showProfile"]);
 Route::get('/manage-avatar', [UserController::class, "showAvatarForm"])->middleware('mustBeLoggenIn');
-Route::post('/manage-avatar', [UserController::class, "saveAvatar"])->middleware('mustBeLoggenIn');;
+Route::post('/manage-avatar', [UserController::class, "saveAvatar"])->middleware('mustBeLoggenIn');
+
+
+Route::post('/create-follow/{user:username}',[ FollowController::class,'follow']);
+Route::post('/remove-follow/{user:username}',[ FollowController::class,'unfollow']);

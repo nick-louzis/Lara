@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -57,14 +58,19 @@ class UserController extends Controller
     }
 
     public function showProfile(User $user){
-
         // $userPosts =  $user->matchPosts()->get();
+        $following=0;
+        if(auth()->check()){
+            $following = Follow::where([['user_id',auth()->user()->id],['followeuser', '=', $user->id]]);
+
+        }
 
         return view('profile-posts',[
          'username'=> $user->username,
          'posts'=> $user->matchPosts()->latest()->get(),
          'postCount'=> $user->matchPosts()->count(),
-         'avatar'=> $user->avatar
+         'avatar'=> $user->avatar,
+         'following'=> $following
         ]);
     }
 
@@ -85,7 +91,7 @@ class UserController extends Controller
         Storage::put("public/avatars/" . $filename, $imgData);
         
         $oldAvatar =$user->avatar;
-
+        
 
         $user->avatar = $filename;
         $user->save();
