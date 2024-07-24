@@ -42,10 +42,12 @@ Route::put('/post/{post}', [PostController::class, "updatePost"])->middleware('c
 //profile routes
 
 //search based on username
-Route::get('/profile/{user:username}', [UserController::class, "showProfile"]);
+Route::get('/profile/{user:username}', [UserController::class, "showProfile"])->middleware('mustBeLoggenIn');
 Route::get('/manage-avatar', [UserController::class, "showAvatarForm"])->middleware('mustBeLoggenIn');
 Route::post('/manage-avatar', [UserController::class, "saveAvatar"])->middleware('mustBeLoggenIn');
+Route::get('/profile/{user:username}/followers', [UserController::class, "showProfileFollowers"])->middleware('mustBeLoggenIn');
+Route::get('/profile/{user:username}/following', [UserController::class, "showProfileFollowing"])->middleware('mustBeLoggenIn');
 
 
-Route::post('/create-follow/{user:username}',[ FollowController::class,'follow']);
-Route::post('/remove-follow/{user:username}',[ FollowController::class,'unfollow']);
+Route::post('/create-follow/{user:username}',[ FollowController::class,'follow'])->middleware('mustBeLoggenIn');
+Route::post('/remove-follow/{user:username}',[ FollowController::class,'unfollow'])->middleware('mustBeLoggenIn');

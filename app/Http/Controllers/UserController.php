@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Follow;
 use App\Models\User;
+use App\Models\Follow;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\View;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -57,22 +58,46 @@ class UserController extends Controller
         return redirect('/')->with('logout','You have logged out successfully.');
     }
 
-    public function showProfile(User $user){
-        // $userPosts =  $user->matchPosts()->get();
-        $following=0;
-        if(auth()->check()){
-            $following = Follow::where([['user_id',auth()->user()->id],['followeuser', '=', $user->id]]);
 
+    private function getSharedData($user){
+        $following = 0;
+        if(auth()->check()){
+            $following = Follow::where([['user_id','=' ,auth()->user()->id],['followeduser', '=', $user->id]])->count();
+                
         }
 
-        return view('profile-posts',[
-         'username'=> $user->username,
-         'posts'=> $user->matchPosts()->latest()->get(),
-         'postCount'=> $user->matchPosts()->count(),
-         'avatar'=> $user->avatar,
-         'following'=> $following
-        ]);
+        View::share('sharedData',[ 
+            'username'=> $user->username,
+            'postCount'=> $user->matchPosts()->count(),
+            'avatar'=> $user->avatar,
+            'following'=> $following]);
+    }   
+
+    public function showProfile(User $user){
+        // $userPosts =  $user->matchPosts()->get();
+       $this->getSharedData($user);
+
+        return view('profile-posts',['posts'=> $user->matchPosts()->latest()->get()]);
     }
+
+    public function showProfileFollowers(User $user){
+        // $userPosts =  $user->matchPosts()->get();
+        $this->getSharedData($user);
+        return view('profile-followers',['followers'=> $user->followers()->latest()->get()]);
+
+    }
+
+
+    public function showProfileFollowing(User $user){
+        // $userPosts =  $user->matchPosts()->get();
+        
+        $this->getSharedData($user);
+        return view('profile-following',['posts'=> $user->matchPosts()->latest()->get()]);
+
+    }
+
+
+
 
     public function showAvatarForm(){
         return view('avatar-form');
