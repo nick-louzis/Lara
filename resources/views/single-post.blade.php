@@ -1,5 +1,5 @@
 
-<x-layout>
+<x-layout :doctitle="$post->title">
     <div class="container py-md-5 container--narrow">
         <div class="d-flex justify-content-between">
           <h2>{{$post->title}}</h2>
@@ -16,8 +16,8 @@
         </div>
   
         <p class="text-muted small mb-4">
-          <a href="#"><img class="avatar-tiny" src="{{$post->matchPostToUser->avatar}}" /></a>
-          Posted by <a href="#">{{$post->matchPostToUser->username}}</a> on {{$post->created_at}}
+          <a href="/profile/{{$post->matchPostToUser->username}}"><img class="avatar-tiny" src="{{$post->matchPostToUser->avatar}}" /></a>
+          Posted by <a href="/profile/{{$post->matchPostToUser->username}}">{{$post->matchPostToUser->username}}</a> on {{$post->created_at}}
         </p>
   
         <div class="body-content">
