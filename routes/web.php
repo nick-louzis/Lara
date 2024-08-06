@@ -29,6 +29,9 @@ Route::get('/', [UserController::class, "showCorrectHomepage"])->name('login');
 Route::post('/register', [UserController::class, "register"])->middleware('guest');
 Route::post('/login', [UserController::class, "login"])->middleware('guest');
 Route::post('/logout', [UserController::class, "logout"])->middleware('mustBeLoggenIn');
+Route::get('/search/{term}', [PostController::class, "search"])->middleware('mustBeLoggenIn');
+
+
 
 //Post related routes
 Route::get('/create-post', [PostController::class, "showCreatePost"])->middleware('mustBeLoggenIn');

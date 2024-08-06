@@ -16,8 +16,8 @@
         </div>
   
         <p class="text-muted small mb-4">
-          <a href="/profile/{{$post->matchPostToUser->username}}"><img class="avatar-tiny" src="{{$post->matchPostToUser->avatar}}" /></a>
-          Posted by <a href="/profile/{{$post->matchPostToUser->username}}">{{$post->matchPostToUser->username}}</a> on {{$post->created_at}}
+          <a href="/profile/{{$post->user->username}}"><img class="avatar-tiny" src="{{$post->user->avatar}}" /></a>
+          Posted by <a href="/profile/{{$post->user->username}}">{{$post->user->username}}</a> on {{$post->created_at}}
         </p>
   
         <div class="body-content">
