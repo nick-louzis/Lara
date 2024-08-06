@@ -70,7 +70,9 @@ class UserController extends Controller
             'username'=> $user->username,
             'postCount'=> $user->matchPosts()->count(),
             'avatar'=> $user->avatar,
-            'following'=> $following]);
+            'following'=> $following,
+            'totalFollowing'=>$user->following()->count(),
+            'totalFollowers'=>$user->followers()->count()]);
     }   
 
     public function showProfile(User $user){
@@ -92,7 +94,7 @@ class UserController extends Controller
         // $userPosts =  $user->matchPosts()->get();
         
         $this->getSharedData($user);
-        return view('profile-following',['posts'=> $user->matchPosts()->latest()->get()]);
+        return view('profile-following',['following'=> $user->following()->latest()->get()]);
 
     }
 
